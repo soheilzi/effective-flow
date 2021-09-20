@@ -7,7 +7,7 @@ import random
 import numpy as np
 import time
 
-sampleSize = 256
+sampleSize = 512
 processCount = 4
 X = [[multiprocessing.Value("f", 0.0, lock=False) for j in range(sampleSize // processCount)] for i in range(processCount)]
 
