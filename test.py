@@ -1,7 +1,7 @@
 # importing the threading module
 import threading
 
-x = []
+X1 = []
 
 def print_cube(num):
     # x.append(3)
