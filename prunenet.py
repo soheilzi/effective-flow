@@ -41,6 +41,7 @@ i = 0
 for index, row in edgesDF_copy.iterrows():
     channelsDf['edge1_id'] = channelsDf['edge1_id'].replace([row['id']], i)
     channelsDf['edge2_id'] = channelsDf['edge2_id'].replace([row['id']], i)
+    edgesDf['counter_edge_id'] = edgesDf['counter_edge_id'].replace([row['id']], i)
     edgesDf['id'] = edgesDf['id'].replace([row['id']], i)
     i += 1
 
