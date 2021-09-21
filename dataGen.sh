@@ -9,8 +9,8 @@ do
     echo "start----gen $i"
     
     echo "-------simulation start $i"
-    cd cloth
-    ./run-simulation 10 output_dir/
+    cd ./cloth
+    bash ./run-simulation.sh 10 output_dir/
     cd ..
     echo "-------simulation end $i" 
 

@@ -6,7 +6,6 @@ def remove_row_channels(file, channelsDelNum):
     df = pd.read_csv(file)
     args = random.sample(df.index.values.tolist(), channelsDelNum)
     deletedRows = df.iloc[args]
-    print(deletedRows)
     df = df.drop(index=args)
     df.to_csv(file, index=False)
     return deletedRows['id']
