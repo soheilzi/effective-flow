@@ -31,3 +31,9 @@ if __name__ == "__main__":
     # both threads completely executed
     print("Done!")
     print(a , b)
+
+def remove_specific_row_from_csv(file, args):
+    df = pd.read_csv(file)
+    res = df[['']]
+    df = df.drop(index=args)
+    df.to_csv(file, index=False)
