@@ -6,15 +6,15 @@ fi
 
 for i in `seq 1 $1`
 do
-    network_dir=$(date +'%d/%H/%M')
+    network_dir=$(date +'%d-%H-%M')
 
-    echo "\nstart----gen $i\n"
+    echo "start----gen $i"
     
-    echo "\n-------simulation start $i\n"
+    echo "-------simulation start $i"
     cd ./cloth
     bash ./run-simulation.sh 10 output_dir/
     cd ..
-    echo "\n-------simulation end $i\n" 
+    echo "-------simulation end $i" 
 
     echo "-------ef calculation start $i"
     python3 ef.py $3 ./cloth/edges_ef.csv ./cloth/nodes_ef.csv ./cloth/output_dir/cloth_output.json $2
@@ -26,9 +26,9 @@ do
     cp ../../cloth/channels_ef.csv ./$network_dir
     cd ../../
 
-    echo "\n-------prune start $i\n"
+    echo "-------prune start $i"
     python3 prunenet.py $4 ./cloth/channels_ef.csv ./cloth/edges_ef.csv
-    echo "\n-------prune end $i\n"
+    echo "-------prune end $i"
 
-    echo "\nend------gen $i\n"
+    echo "end------gen $i"
 done
