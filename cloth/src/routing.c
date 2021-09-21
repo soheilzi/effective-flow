@@ -349,8 +349,7 @@ struct array* dijkstra(long source, long target, uint64_t amount, struct network
     *error = NOPATH;
     return NULL;
   }
-  //change
-  printf("1: source: %ld  traget: %ld \n", source, target);
+
   while(heap_len(distance_heap[p])!=0)
     heap_pop(distance_heap[p], compare_distance);
 
@@ -442,8 +441,7 @@ struct array* dijkstra(long source, long target, uint64_t amount, struct network
       distance_heap[p] = heap_insert_or_update(distance_heap[p], &distance[p][from_node_id], compare_distance, is_key_equal);
     }
     }
-  //change
-  printf("n: source: %ld  traget: %ld \n", source, target);
+
 
   hops = array_initialize(5);
   curr = source;
