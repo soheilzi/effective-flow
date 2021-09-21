@@ -26,19 +26,23 @@ deletedRows, channelsDf = remove_row_channels(channelsFile, channelsDelNum)
 edgesDf = remove_specific_row_from_csv(edgesFile, "channel_id", deletedRows)
 
 ## postprocessing
+channelsDF_copy = channelsDf.copy()
+edgesDF_copy = edgesDf.copy()
 channelsDf.to_csv("test1.csv", index=False)
 
-for index, row in channelsDf.iterrows():
-    channelsDf['id'] = channelsDf['id'].replace([row['id']], index)
-    edgesDf['channel_id'] = edgesDf['channel_id'].replace([row['id']], index)
-    
+i = 0
+for index, row in channelsDF_copy.iterrows():
+    edgesDf['channel_id'] = edgesDf['channel_id'].replace([row['id']], i)
+    channelsDf['id'] = channelsDf['id'].replace([row['id']], i)
+    i += 1
 
-channelsDf.to_csv("test2.csv", index=False)
+i = 0
+# channelsDf.to_csv("test2.csv", index=False)
+for index, row in edgesDF_copy.iterrows():
+    channelsDf['edge1_id'] = channelsDf['edge1_id'].replace([row['id']], i)
+    channelsDf['edge2_id'] = channelsDf['edge2_id'].replace([row['id']], i)
+    edgesDf['id'] = edgesDf['id'].replace([row['id']], i)
+    i += 1
 
-# for index, row in edgesDf.iterrows():
-#     edgesDf['id'] = edgesDf['id'].replace([row['id']], index)
-#     channelsDf['edge1_id'] = channelsDf['edge1_id'].replace([row['id']], index)
-#     channelsDf['edge2_id'] = channelsDf['edge2_id'].replace([row['id']], index)
-
-# channelsDf.to_csv(channelsFile, index=False)
-# edgesDf.to_csv(edgesFile, index=False)
+channelsDf.to_csv(channelsFile, index=False)
+edgesDf.to_csv(edgesFile, index=False)
