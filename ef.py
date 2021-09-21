@@ -68,6 +68,7 @@ data = data.astype({'weight' : int})
 
 ### graph constructoin
 G = nx.from_pandas_edgelist(data, 'from_node_id', 'to_node_id', edge_attr=['capacity', 'weight'], create_using=nx.DiGraph())
+G.add_nodes_from(nodeList)
 
 # multiprocessing
 randS = random.sample(nodeList, sampleSize)

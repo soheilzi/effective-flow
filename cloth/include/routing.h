@@ -8,8 +8,8 @@
 #include "array.h"
 #include "list.h"
 #include "network.h"
-
-#define N_THREADS 3
+///change
+#define N_THREADS 1
 #define FINALTIMELOCK 40
 
 extern pthread_mutex_t data_mutex;

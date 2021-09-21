@@ -38,6 +38,9 @@
 #     df = df.drop(index=args)
 #     df.to_csv(file, index=False)
 
-import pandas as pd
-data = pd.read_csv("./result/net_result.csv")
-print(data)
+# import pandas as pd
+# data = pd.read_csv("./result/net_result.csv")
+# print(data)
+import random
+args = random.sample(range(10), 4)
+print(args)

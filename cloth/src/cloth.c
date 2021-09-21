@@ -321,7 +321,6 @@ int main(int argc, char *argv[]) {
   printf("EVENTS INITIALIZATION\n");
   simulation->events = initialize_events(payments);
   initialize_dijkstra(n_nodes, n_edges, payments);
-
   printf("INITIAL DIJKSTRA THREADS EXECUTION\n");
   clock_gettime(CLOCK_MONOTONIC, &start);
   run_dijkstra_threads(network, payments, 0);

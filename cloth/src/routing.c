@@ -92,7 +92,6 @@ void run_dijkstra_threads(struct network*  network, struct array* payments, uint
   long i;
   pthread_t tid[N_THREADS];
   struct thread_args *thread_args;
-
   for(i=0; i<N_THREADS; i++) {
     thread_args = (struct thread_args*) malloc(sizeof(struct thread_args));
     thread_args->network = network;
@@ -350,7 +349,8 @@ struct array* dijkstra(long source, long target, uint64_t amount, struct network
     *error = NOPATH;
     return NULL;
   }
-
+  //change
+  printf("1: source: %ld  traget: %ld \n", source, target);
   while(heap_len(distance_heap[p])!=0)
     heap_pop(distance_heap[p], compare_distance);
 
@@ -371,7 +371,7 @@ struct array* dijkstra(long source, long target, uint64_t amount, struct network
   distance[p][target].probability = 1;
 
   distance_heap[p] =  heap_insert_or_update(distance_heap[p], &distance[p][target], compare_distance, is_key_equal);
-
+  
   while(heap_len(distance_heap[p])!=0) {
 
     d = heap_pop(distance_heap[p], compare_distance);
@@ -387,7 +387,6 @@ struct array* dijkstra(long source, long target, uint64_t amount, struct network
     for(j=0; j<array_len(best_node->open_edges); j++) {
       edge = array_get(best_node->open_edges, j);
       edge = array_get(network->edges, edge->counter_edge_id);
-
       from_node_id = edge->from_node_id;
       if(from_node_id == source){
         if(edge->balance < amt_to_send)
@@ -395,10 +394,12 @@ struct array* dijkstra(long source, long target, uint64_t amount, struct network
       }
       else{
         channel = array_get(network->channels, edge->channel_id);
+  
         if(channel->capacity < amt_to_send)
+        {
           continue;
+        }
       }
-
       if(amt_to_send < edge->policy.min_htlc)
         continue;
 
@@ -441,6 +442,8 @@ struct array* dijkstra(long source, long target, uint64_t amount, struct network
       distance_heap[p] = heap_insert_or_update(distance_heap[p], &distance[p][from_node_id], compare_distance, is_key_equal);
     }
     }
+  //change
+  printf("n: source: %ld  traget: %ld \n", source, target);
 
   hops = array_initialize(5);
   curr = source;
