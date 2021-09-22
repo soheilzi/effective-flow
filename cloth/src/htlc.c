@@ -28,7 +28,9 @@
 uint64_t compute_fee(uint64_t amount_to_forward, struct policy policy) {
   uint64_t fee;
   fee = (policy.fee_proportional*amount_to_forward) / 1000000;
-  return policy.fee_base + fee;
+  //change
+  // return policy.fee_base + fee;
+  return fee;
 }
 
 /* check whether there is sufficient balance in an edge for forwarding the payment; check also that the policies in the edge are respected */
