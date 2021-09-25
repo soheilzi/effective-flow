@@ -7,7 +7,7 @@ edgesDir = sys.argv[1]
 nodesFile = sys.argv[2]
 
 
-for i in range(1, 30):
+for i in range(1, 31):
         edgesFile = edgesDir + str(i) + "/edges_ef.csv"
 
         data = pd.read_csv(edgesFile)
