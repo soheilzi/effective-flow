@@ -11,8 +11,8 @@ sampleSize = int(sys.argv[1]) #128
 dataSize = int(sys.argv[2]) #100
 edgesFile = sys.argv[3]
 nodesFile = sys.argv[4]
-# jsonFile = sys.argv[4]
-# resultFile = sys.argv[5]
+resultFile = sys.argv[5]
+paymentsFile = sys.argv[6]
 
 processCount = 4
 X = [[multiprocessing.Value("f", 0.0, lock=False) for j in range(sampleSize // processCount)] for i in range(processCount)]
@@ -33,26 +33,53 @@ def efSampler(G, randS, randT, processId, costCoef=1):
         X[processId][i].value = (mincostFlowValue - costCoef * mincost) / fund
         # print(X[processId][i])
     
-# def readSimResultFile(jsonFile):
-#     f = open(jsonFile,)
-#     data = json.load(f)
-#     f.close()
-#     # print(data)
-#     return data
 
-# def writeResultIntoFile(resultFile, jsonData, netEf, netEfConf):
-#     # net_ef,net_ef_conf,success,success_conf,fail_no_path,fail_no_path_conf,fail_no_balance,fail_no_balance_conf,time,time_conf,attempts,attempts_conf,rout_length,rout_length_conf
-#     row = [netEf, netEfConf, 
-#     jsonData['Success']['Mean'], (float(jsonData['Success']['ConfidenceMin']) - float(jsonData['Success']['ConfidenceMin']))/2, 
-#     jsonData['FailNoPath']['Mean'], (float(jsonData['FailNoPath']['ConfidenceMin']) - float(jsonData['FailNoPath']['ConfidenceMin']))/2, 
-#     jsonData['FailNoBalance']['Mean'], (float(jsonData['FailNoBalance']['ConfidenceMin']) - float(jsonData['FailNoBalance']['ConfidenceMin']))/2, 
-#     jsonData['Time']['Mean'], (float(jsonData['Time']['ConfidenceMin']) - float(jsonData['Time']['ConfidenceMin']))/2, 
-#     jsonData['Attempts']['Mean'], (float(jsonData['Attempts']['ConfidenceMin']) - float(jsonData['Attempts']['ConfidenceMin']))/2, 
-#     jsonData['RouteLength']['Mean'], (float(jsonData['RouteLength']['ConfidenceMin']) - float(jsonData['RouteLength']['ConfidenceMin']))/2, 
-#     ]
-#     with open(resultFile, 'a') as f:
-#         writer = csv.writer(f)
-#         writer.writerow(row)
+def writeResultIntoFile(nodeId, nodeEf, nodeEfConf, nodeSuccessRate):
+    # node_id, node_ef, node_conf, success_rate
+    row = [nodeId, nodeEf, nodeEfConf, nodeSuccessRate]
+    with open(resultFile, 'a') as f:
+        writer = csv.writer(f)
+        writer.writerow(row)
+
+def dataExtractor(G, randS, nodeList, payments):
+    efResult = []
+    successResult = []
+    for k in range(dataSize):
+        ## effective flow
+        ### multiprocessing
+        randT = random.sample(nodeList, sampleSize)
+        # print(randT)
+        p0 = multiprocessing.Process(target=efSampler, args=(G, randS[k], randT[0:sampleSize // processCount], 0,))
+        p1 = multiprocessing.Process(target=efSampler, args=(G, randS[k], randT[sampleSize // processCount: 2 * sampleSize // processCount], 1,))
+        p2 = multiprocessing.Process(target=efSampler, args=(G, randS[k], randT[sampleSize // 2: 3 * sampleSize // processCount], 2,))
+        p3 = multiprocessing.Process(target=efSampler, args=(G, randS[k], randT[3 * sampleSize // processCount: sampleSize], 3,))
+
+        p0.start()
+        p1.start()
+        p2.start()
+        p3.start()
+
+        p0.join()
+        p1.join()
+        p2.join()
+        p3.join()
+
+        Xjoined = []
+        for i in range(processCount):
+            for j in range(sampleSize // processCount):
+                Xjoined.append(X[i][j].value)
+
+        efResult.append((randS[k], np.mean(Xjoined), 2*(np.std(Xjoined) / np.sqrt(sampleSize))))
+
+        successResult.append(successRateCalculator(randS[k], payments))
+
+        writeResultIntoFile(efResult[k][0], efResult[k][1], efResult[k][2], successResult[k])
+    # return efResult
+
+def successRateCalculator(randS, payments):
+    succeededPayments = payments[(payments['sender_id'] == randS) & (payments['is_success'] == 1)].count()[0]
+    totalPayments = payments[(payments['sender_id'] == randS)].count()[0]
+    return float(succeededPayments) / totalPayments
 
 data = pd.read_csv(edgesFile)
 data.rename(columns={"balance" : "capacity", "fee_proportional" : "weight"}, inplace=True)
@@ -69,37 +96,14 @@ data = data.astype({'weight' : int})
 G = nx.from_pandas_edgelist(data, 'from_node_id', 'to_node_id', edge_attr=['capacity', 'weight'], create_using=nx.DiGraph())
 G.add_nodes_from(nodeList)
 
-randS = random.sample(nodeList, dataSize)
-efResult = []
+## payments
+payments = pd.read_csv(paymentsFile)
+paymentsSenders = list(payments['sender_id'])
+randS = random.sample(paymentsSenders, dataSize)
 
-# print(randS)
 
-for k in range(dataSize):
-    # multiprocessing
-    randT = random.sample(nodeList, sampleSize)
-    X = [[multiprocessing.Value("f", 0.0, lock=False) for j in range(sampleSize // processCount)] for i in range(processCount)]
-    p0 = multiprocessing.Process(target=efSampler, args=(G, randS[k], randT[0:sampleSize // processCount], 0,))
-    p1 = multiprocessing.Process(target=efSampler, args=(G, randS[k], randT[sampleSize // processCount: 2 * sampleSize // processCount], 1,))
-    p2 = multiprocessing.Process(target=efSampler, args=(G, randS[k], randT[sampleSize // 2: 3 * sampleSize // processCount], 2,))
-    p3 = multiprocessing.Process(target=efSampler, args=(G, randS[k], randT[3 * sampleSize // processCount: sampleSize], 3,))
-
-    p0.start()
-    p1.start()
-    p2.start()
-    p3.start()
-
-    p0.join()
-    p1.join()
-    p2.join()
-    p3.join()
-
-    Xjoined = []
-    for i in range(processCount):
-        for j in range(sampleSize // processCount):
-            Xjoined.append(X[i][j].value)
-
-    efResult.append((randS[k], np.mean(Xjoined), 2*(np.std(Xjoined) / np.sqrt(sampleSize))))
-    # print((k, randS[k], np.mean(Xjoined), 2*(np.std(Xjoined) / np.sqrt(sampleSize))))
-    ## other centralities
-
-print(efResult)
+dataExtractor(G, randS, nodeList, payments)
+## other centralities
+### betweenness
+# bcResult = []
+# bcResult = nx.betweenness_centrality(G, weight=False, normalized=False)
