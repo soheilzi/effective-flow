@@ -1,21 +1,21 @@
 {
     "Success": {
-        "Mean": "0.0268467479",
-        "Variance": "0.0001587545",
-        "ConfidenceMin": "0.0266987564",
-        "ConfidenceMax": "0.0269947394"
+        "Mean": "0.9965621033",
+        "Variance": "0.0000077571",
+        "ConfidenceMin": "0.9965293901",
+        "ConfidenceMax": "0.9965948165"
     },
     "FailNoPath": {
-        "Mean": "0.9731532521",
-        "Variance": "0.0001587545",
-        "ConfidenceMin": "0.9730052606",
-        "ConfidenceMax": "0.9733012436"
+        "Mean": "0.0019931944",
+        "Variance": "0.0000023516",
+        "ConfidenceMin": "0.0019751828",
+        "ConfidenceMax": "0.0020112059"
     },
     "FailNoBalance": {
-        "Mean": "0.0000000000",
-        "Variance": "0.0000000000",
-        "ConfidenceMin": "0.0000000000",
-        "ConfidenceMax": "0.0000000000"
+        "Mean": "0.0014447023",
+        "Variance": "0.0000035035",
+        "ConfidenceMin": "0.0014227173",
+        "ConfidenceMax": "0.0014666874"
     },
     "FailOfflineNode": {
         "Mean": "0.0000000000",
@@ -30,21 +30,21 @@
         "ConfidenceMax": "0.0000000000"
     },
     "Time": {
-        "Mean": "959.1529069767",
-        "Variance": "28719.8178917804",
-        "ConfidenceMin": "957.1623966365",
-        "ConfidenceMax": "961.1434173169"
+        "Mean": "966.7482200566",
+        "Variance": "5451.5497184851",
+        "ConfidenceMin": "965.8809914689",
+        "ConfidenceMax": "967.6154486443"
     },
     "Attempts": {
-        "Mean": "1.0000000000",
-        "Variance": "0.0000000000",
-        "ConfidenceMin": "1.0000000000",
-        "ConfidenceMax": "1.0000000000"
+        "Mean": "1.6969581862",
+        "Variance": "0.0010111066",
+        "ConfidenceMin": "1.6965847022",
+        "ConfidenceMax": "1.6973316703"
     },
     "RouteLength": {
-        "Mean": "4.8208084164",
-        "Variance": "0.7245492273",
-        "ConfidenceMin": "4.8108105450",
-        "ConfidenceMax": "4.8308062878"
+        "Mean": "4.1389666361",
+        "Variance": "0.1259970905",
+        "ConfidenceMin": "4.1347974253",
+        "ConfidenceMax": "4.1431358469"
     }
 }
