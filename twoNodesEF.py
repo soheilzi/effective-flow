@@ -57,7 +57,7 @@ def plotData(s, t, ef, fund, receivedAmount, sentAmount):
     plt.plot(sentAmount, [ef * fund] * len(sentAmount), label="ef*fund")
     plt.xlabel("sent amount")
     plt.ylabel("received amount")
-    plt.title("s:%d t:%d ef:%f fund:%f"%(s, t, ef, fund))
+    plt.title("s:%d t:%d ef:%f fund:%d"%(s, t, ef, fund))
     plt.show()
 
 
