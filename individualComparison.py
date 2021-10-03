@@ -7,8 +7,8 @@ import sys
 import json
 import csv
 
-sampleSize = int(sys.argv[1]) #128
-dataSize = int(sys.argv[2]) #100
+sampleSize = int(sys.argv[1]) #32
+dataSize = int(sys.argv[2]) #5
 edgesFile = sys.argv[3]
 nodesFile = sys.argv[4]
 resultFile = sys.argv[5]
@@ -29,6 +29,7 @@ def efSampler(G, randS, randT, processId, costCoef=1):
         
         fund = sum((G[s][u]['capacity'] for u in G.successors(s)))
         if fund == 0:
+            X[processId][i].value = 0
             continue
         X[processId][i].value = (mincostFlowValue - costCoef * mincost) / fund
         # print(X[processId][i])
@@ -94,7 +95,7 @@ data = data.astype({'weight' : int})
 
 ### graph constructoin
 G = nx.from_pandas_edgelist(data, 'from_node_id', 'to_node_id', edge_attr=['capacity', 'weight'], create_using=nx.DiGraph())
-G.add_nodes_from(nodeList)
+# G.add_nodes_from(nodeList)
 
 ## payments
 payments = pd.read_csv(paymentsFile)
