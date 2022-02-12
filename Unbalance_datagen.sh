@@ -14,8 +14,6 @@ echo $3
 for i in `seq $1 $2`
 do
     network_dir=$((i*unbalance_count)) 
-    echo $unbalance_count
-    echo $network_dir
 
     echo "start----gen $i with $((i*unbalance_count)) channels becomming unbalanced"
     
