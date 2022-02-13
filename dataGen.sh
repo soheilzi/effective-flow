@@ -31,4 +31,4 @@ do
     echo "-------prune end $i"
 
     echo "end------gen $i"
-done
+done 
