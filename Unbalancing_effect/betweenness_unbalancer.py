@@ -1,11 +1,33 @@
+from matplotlib import lines
 import pandas as pd
 import sys
 import random
 
-# def select_most_betweens(channels_df, )
+from pyparsing import line
+
+def read_centrality_file():
+    f = open("sorted_centrality.txt", "r")
+    lines = f.readlines()
+    f.close()
+    return lines
+
+def find_index(channel_id, channels_df):
+    return channels_df.index[channels_df['id'] == channel_id].tolist()
+    print(channel_id)
+
+def select_most_betweens(channleUnbalancedCount, channels_df):
+    indexes = []
+    lines = read_centrality_file()
+    for line in lines[:channleUnbalancedCount]:
+        # print(find_index(int(line), channels_df), int(line))
+        indexes.append(find_index(int(line), channels_df)[0])
+    return indexes
+
 def select_channels(file, channleUnbalancedCount):
     df = pd.read_csv(file)
-    args = random.sample(df.index.values.tolist(), channleUnbalancedCount)  
+    # select_most_betweens(channleUnbalancedCount, df)
+##    # args = random.sample(df.index.values.tolist(), channleUnbalancedCount)  
+    args = select_most_betweens(channleUnbalancedCount, df)
     unbalancedRows = df.iloc[args]
     return unbalancedRows['id'], df
 
