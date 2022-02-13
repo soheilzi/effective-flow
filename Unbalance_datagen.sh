@@ -8,7 +8,6 @@ then
     exit
 fi
 unbalance_count=$3
-echo $3
 # we have 30457 channels in the channels file if we want 20 datapoints we can eliminate 1500 extra channels per iteration
 #1500 channels per iteration
 for i in `seq $1 $2`
