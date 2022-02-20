@@ -60,7 +60,9 @@ data.rename(columns={"balance" : "capacity", "fee_proportional" : "weight"}, inp
 data = data[['from_node_id', 'to_node_id', 'capacity', 'weight']]
 
 nodeData = pd.read_csv(nodesFile)
-nodeList = list(nodeData['id'])
+
+
+nodeList = list(nodeData['id']) 
 
 ### preprocess
 data = data.groupby(['from_node_id', 'to_node_id']).agg({'capacity': 'sum', 'weight': 'mean'}).reset_index()
